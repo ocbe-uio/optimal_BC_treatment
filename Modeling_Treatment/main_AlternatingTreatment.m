@@ -3,7 +3,12 @@
 %
 % Author: Tuğba Akman Date: Jan 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Data are taken from
+% Obesity-Activated Adipose-Derived Stromal Cells Promote
+% Breast Cancer Growth and Invasion
+% Neoplasia (2018) 20, 1161-1174
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function main_AlternatingTreatment()
 
 close all
@@ -18,7 +23,7 @@ global Eq
 
 %Initial conditions
 T0=1;
-S0=1;
+S0=0.75;
 R0=T0-S0;
 E0_CD=1040.35/5.94;
 E0_HFD=7685.87/5.94;
@@ -45,10 +50,10 @@ Eq.l=10;
 Eq.Sbound=0;
 Eq.k2CD = 0.045;
 Eq.k2HFD= 0.045;
-Eq.k3CD=0.25*Eq.k1;
-Eq.k3HFD=0.25*Eq.k1;
-Eq.a2=10;
-Eq.a3=10;
+Eq.k3CD=0.5*Eq.k1;
+Eq.k3HFD=0.5*Eq.k1;
+Eq.a2=20;
+Eq.a3=1;
 
 % Weights in the cost functional
 Eq.weight1 = 1;
@@ -88,8 +93,8 @@ options = odeset('RelTol',1e-6,'AbsTol',1e-6);
 
 Tumor=ceil(X_uncon_CD(:,1)+ X_uncon_CD(:,2));
 index_CD=(find(Tumor>tumor_threshold))-1;
-t0_treatment_CD=(Tx_uncon_CD(min(index_CD)))
-Tumor(min(index_CD))
+t0_treatment_CD=(Tx_uncon_CD(min(index_CD)));
+Tumor(min(index_CD));
 
 % Time discretization for CD
 t0_treatment=t0_treatment_CD; % treatment starts at t=t0_treatment
@@ -97,8 +102,8 @@ Tu_treatment=t0_treatment:0.1:tf;
 
 Tumor=ceil(X_uncon_HFD(:,1)+ X_uncon_HFD(:,2));
 index_HFD=find(Tumor>tumor_threshold)-1;
-t0_treatment_HFD= (Tx_uncon_HFD(min(index_HFD)))
-Tumor(min(index_HFD))
+t0_treatment_HFD= (Tx_uncon_HFD(min(index_HFD)));
+Tumor(min(index_HFD));
 
 %Preperation for treatment
 [~,X_uncon_treat_CD] = ode15s(@(t,x) stateEqCD(t,x,uCD,Tu), [t0:.0001:t0_treatment_CD], ...
@@ -114,8 +119,8 @@ initx_treatment_HFD = X_uncon_treat_HFD(end,:);
 
 % Set the treatment for CD
 uCD_adapt=0*ones(size(Tu_treatment))';
-for ii=1:2:5
-    uCD_adapt((ii-1)*21+1:((ii*21)))=M2*1;
+for ii=1:2:6 % 10
+    uCD_adapt((ii-1)*21+1:((ii*21)))=M2*1; % 21 11
 end
 
 % Solve the DE
@@ -130,8 +135,8 @@ Tu_treatment=t0_treatment:0.1:tf;
 
 % Set the treatment for HFD
 uHFD_adapt=0*ones(size(Tu_treatment))';
-for ii=1:2:6
-    uHFD_adapt((ii-1)*22+1:((ii*22)))=M2*1;
+for ii=1:2:6 %6 11
+    uHFD_adapt((ii-1)*21+1:((ii*21)))=M2*1; % 21 11
 end
 
 % Solve the DE
@@ -141,156 +146,31 @@ end
 XHFD=X; TxHFD=Tx;
 
 %%
-figure(51)
-plot(TxHFD,M2*ones(size(TxHFD)),'-r','LineWidth',4)
-hold on
-stairs(TxCD,uCD_adapt,'c-','LineWidth',4)
-hold on
-stairs(TxHFD,uHFD_adapt,'b:.','LineWidth',4)
-title('Control function')
-xlabel('t')
-ylabel('u(t)')
-legend('Upper bound','CD','HFD','Location','SouthEast')
-xlim([10,tf])
-grid on
-
-
-figure(52)
-subplot(2,4,1)
-plot(Tx_uncon_CD,X_uncon_CD(:,1),'r-','LineWidth',4)
-hold on
-plot(TxCD,XCD(:,1),'b:.','LineWidth',4)
-grid on
-xlabel('t')
-ylabel('S(t)')
-title('CD')
-ylim([0,2100])
-xlim([0,tf])
-
-subplot(2,4,2)
-plot(Tx_uncon_CD,X_uncon_CD(:,2),'r-','LineWidth',4)
-hold on
-plot(TxCD,XCD(:,2),'b:.','LineWidth',4)
-grid on
-xlabel('t')
-ylabel('R(t)')
-title('CD')
-ylim([0,2100])
-xlim([0,tf])
-
-subplot(2,4,3)
-plot(Tx_uncon_CD,X_uncon_CD(:,3),'r-','LineWidth',4)
-hold on
-plot(TxCD,XCD(:,3),'b:.','LineWidth',4)
-grid on
-legend('u_{CD}=0','u_{CD} \neq 0','Location','NorthEast')
-xlabel('t')
-ylabel('E(t)')
-title('CD')
-ylim([0,1500])
-xlim([0,tf])
-
-subplot(2,4,4)
-plot(Tx_uncon_CD,X_uncon_CD(:,4),'r-','LineWidth',4)
-hold on
-plot(TxCD,XCD(:,4),'b:.','LineWidth',4)
-grid on
-xlabel('t')
-ylabel('F(t)')
-title('CD')
-ylim([0,400])
-xlim([0,tf])
-
-subplot(2,4,5)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,1),'r-','LineWidth',4)
-hold on
-plot(TxHFD,XHFD(:,1),'b:.','LineWidth',4)
-grid on
-xlabel('t')
-ylabel('S(t)')
-title('HFD')
-ylim([0,2100])
-xlim([0,tf])
-
-subplot(2,4,6)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,2),'r-','LineWidth',4)
-hold on
-plot(TxHFD,XHFD(:,2),'b:.','LineWidth',4)
-grid on
-xlabel('t')
-ylabel('R(t)')
-title('HFD')
-ylim([0,2100])
-xlim([0,tf])
-
-subplot(2,4,7)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,3),'r-','LineWidth',4)
-hold on
-plot(TxHFD,XHFD(:,3),'b:.','LineWidth',4)
-grid on
-legend('u_{HFD}=0','u_{HFD} \neq 0','Location','NorthEast')
-xlabel('t')
-ylabel('E(t)')
-title('HFD')
-ylim([0,1500])
-xlim([0,tf])
-
-subplot(2,4,8)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,4),'r-','LineWidth',4)
-hold on
-plot(TxHFD,XHFD(:,4),'b:.','LineWidth',4)
-grid on
-xlabel('t')
-ylabel('F(t)')
-title('HFD')
-ylim([0,400])
-xlim([0,tf])
-
-figure(55)
-plot(Tx_uncon_CD,X_uncon_CD(:,1)+X_uncon_CD(:,2),'r-','LineWidth',4)
-hold on
-plot(TxCD,XCD(:,1)+XCD(:,2),'b:.','LineWidth',4)
-grid on
-legend('u_{CD}=0','u_{CD} \neq 0','Location','SouthEast')
-xlabel('t')
-ylabel('S(t)+R(t)')
-xlim([0,tf])
-ylim([0,2100])
-title('CD');
-
-figure(56)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,1)+X_uncon_HFD(:,2),'r-','LineWidth',4)
-hold on
-plot(TxHFD,XHFD(:,1)+XHFD(:,2),'b:.','LineWidth',4)
-grid on
-legend('u_{HFD}=0','u_{HFD} \neq 0','Location','SouthEast')
-xlabel('t')
-ylabel('S(t)+R(t)')
-xlim([0,tf])
-ylim([0,2100])
-title('HFD');
 
 figure(57)
+colororder({'b','k'})
 yyaxis left
 f1=plot(Tx_uncon_CD,X_uncon_CD(:,1)+X_uncon_CD(:,2),'-','LineWidth',4);
 hold on
-f2=plot(TxCD,XCD(:,1)+XCD(:,2),':.','LineWidth',4);
+f2=plot(TxCD,XCD(:,1)+XCD(:,2),':','LineWidth',4);
 grid on
 xlabel('t')
 ylabel('S(t)+R(t)')
 xlim([0,tf])
 ylim([0,2100])
 yyaxis right
-f3=stairs(TxCD,uCD_adapt,'-','LineWidth',2);
+f3=stairs(TxCD,uCD_adapt,'--','LineWidth',2);
 ylabel('u(t)')
 legend([f1,f2,f3],{'u=0','u \neq 0','Control func.'},'Location','NorthWest')
 title('CD');
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
 figure(58)
+colororder({'b','k'})
 yyaxis left
 f1=plot(Tx_uncon_HFD,X_uncon_HFD(:,1)+X_uncon_HFD(:,2),'-','LineWidth',4);
 hold on
-f2=plot(TxHFD,XHFD(:,1)+XHFD(:,2),':.','LineWidth',4);
+f2=plot(TxHFD,XHFD(:,1)+XHFD(:,2),':','LineWidth',4);
 grid on
 legend('u_{HFD}=0','u_{HFD} \neq 0','Location','SouthEast')
 xlabel('t')
@@ -298,9 +178,10 @@ ylabel('S(t)+R(t)')
 xlim([0,tf])
 ylim([0,2100])
 yyaxis right
-f3=stairs(TxHFD,uHFD_adapt,'-','LineWidth',2);
+f3=stairs(TxHFD,uHFD_adapt,'-.','LineWidth',2);
 ylabel('u(t)')
 legend([f1,f2,f3],{'u=0','u \neq 0','Control func.'},'Location','NorthWest')
 title('HFD');
+xline(t0_treatment_HFD,'-.k','HandleVisibility','off')
 
 end
