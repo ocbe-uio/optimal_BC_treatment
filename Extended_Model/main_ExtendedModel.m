@@ -6,7 +6,7 @@
 % Data are taken from
 % Obesity-Activated Adipose-Derived Stromal Cells Promote
 % Breast Cancer Growth and Invasion
-% Neoplasia (2018) 20, 1161–1174
+% Neoplasia (2018) 20, 1161-1174
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function main_ExtendedModel
@@ -130,208 +130,216 @@ colormap lines
 figure(113)
 colors = jet(5);
 %subplot(1,2,1)
-plot(tforwardCD_treat,out_big_CD(:,1,1) + m*out_big_CD(:,2,1),'r','LineWidth',2)
+plot(tforwardCD_treat,out_big_CD(:,1,1) + m*out_big_CD(:,2,1),'b','LineWidth',4)
 hold on
-plot(tforwardCD_treat,out_big_CD(:,1,2) + m*out_big_CD(:,2,2),'c-','LineWidth',4)
+plot(tforwardCD_treat,out_big_CD(:,1,2) + m*out_big_CD(:,2,2),'c-','LineWidth',2)
 hold on
 plot(tforwardCD_treat,out_big_CD(:,1,3)+m*out_big_CD(:,2,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardCD_treat,out_big_CD(:,1,4)+m*out_big_CD(:,2,4),'m--','LineWidth',4);
 hold on
-plot(tforwardCD_treat,out_big_CD(:,1,5)+m*out_big_CD(:,2,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardCD_treat,out_big_CD(:,1,5)+m*out_big_CD(:,2,5),'r:','LineWidth',4);
 hold on
-plot(tforwardCD_treat,out_big_CD(:,1,5)+m*out_big_CD(:,2,5),':','color',colors(1,:),'LineWidth',4);
-hold on
-plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,1),'r','LineWidth',2);
+plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,1),'b','LineWidth',4);
 xlabel('t')
 ylim([0,2100])
 title('CD');
 ylabel('S(t)+R(t)')
 legend(strcat('p= ',num2str(pCD_test')),'Location','Best','Orientation','vertical')
 xlim([0,tf])
+xline(t0CD,'--k','HandleVisibility','off')
 grid on
 
 colors = jet(5);
 figure(114)
-plot(tforwardHFD_treat,out_big_HFD(:,1,1) + m*out_big_HFD(:,2,1),'r','LineWidth',2)
+plot(tforwardHFD_treat,out_big_HFD(:,1,1) + m*out_big_HFD(:,2,1),'b','LineWidth',4)
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,1,2) + m*out_big_HFD(:,2,2),'c-','LineWidth',4)
+plot(tforwardHFD_treat,out_big_HFD(:,1,2) + m*out_big_HFD(:,2,2),'c-','LineWidth',2)
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,1,3)+m*out_big_HFD(:,2,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,1,4)+m*out_big_HFD(:,2,4),'m--','LineWidth',4);
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,1,5)+m*out_big_HFD(:,2,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardHFD_treat,out_big_HFD(:,1,5)+m*out_big_HFD(:,2,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,1),'r','LineWidth',2);
+plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,1),'b','LineWidth',4);
 xlabel('t')
 ylabel('S(t)+R(t)')
 ylim([0,2100])
 title('HFD');
 xlim([0,tf])
+xline(t0HFD,'--k','HandleVisibility','off')
 grid on
 
 
 figure(111)
 colors = jet(5);
 subplot(2,4,1)
-plot(tforwardCD_treat,out_big_CD(:,1,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardCD_treat,out_big_CD(:,1,1),'b','LineWidth',4)
 hold on
-plot(tforwardCD_treat,out_big_CD(:,1,2),'c-','LineWidth',4)
+plot(tforwardCD_treat,out_big_CD(:,1,2),'c-','LineWidth',2)
 hold on
 plot(tforwardCD_treat,out_big_CD(:,1,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardCD_treat,out_big_CD(:,1,4),'m--','LineWidth',4);
 hold on
-plot(tforwardCD_treat,out_big_CD(:,1,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardCD_treat,out_big_CD(:,1,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,1),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,1),'b','LineWidth',4);
 xlabel('t')
 ylabel('S(t)')
 title('CD');
 ylim([0,2100])
 xlim([0,tf])
+xline(t0CD,'--k','HandleVisibility','off')
 grid on
 
 subplot(2,4,2)
 colors = jet(5);
-plot(tforwardCD_treat,out_big_CD(:,2,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardCD_treat,out_big_CD(:,2,1),'b','LineWidth',4)
 hold on
-plot(tforwardCD_treat,out_big_CD(:,2,2),'c-','LineWidth',4)
+plot(tforwardCD_treat,out_big_CD(:,2,2),'c-','LineWidth',2)
 hold on
 plot(tforwardCD_treat,out_big_CD(:,2,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardCD_treat,out_big_CD(:,2,4),'m--','LineWidth',4);
 hold on
-plot(tforwardCD_treat,out_big_CD(:,2,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardCD_treat,out_big_CD(:,2,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,2),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,2),'b','LineWidth',4);
 xlabel('t')
 ylim([0,2100])
 ylabel('R(t)')
 title('CD');
 xlim([0,tf])
+xline(t0CD,'--k','HandleVisibility','off')
+legend(strcat('p_{CD}= ',num2str(pCD_test')),'Location','NorthwEst','Orientation','vertical')
 grid on
 
 subplot(2,4,3)
 colors = jet(5);
-plot(tforwardCD_treat,out_big_CD(:,3,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardCD_treat,out_big_CD(:,3,1),'b','LineWidth',4)
 hold on
-plot(tforwardCD_treat,out_big_CD(:,3,2),'c-','LineWidth',4)
+plot(tforwardCD_treat,out_big_CD(:,3,2),'c-','LineWidth',2)
 hold on
 plot(tforwardCD_treat,out_big_CD(:,3,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardCD_treat,out_big_CD(:,3,4),'m--','LineWidth',4);
 hold on
-plot(tforwardCD_treat,out_big_CD(:,3,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardCD_treat,out_big_CD(:,3,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,3),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,3),'b','LineWidth',4);
 xlabel('t')
 ylim([0,1500])
 ylabel('E(t)')
 title('CD');
 xlim([0,tf])
+xline(t0CD,'--k','HandleVisibility','off')
 grid on
-legend(strcat('p_{CD}= ',num2str(pCD_test')),'Location','NorthEast','Orientation','vertical')
 
 subplot(2,4,4)
 colors = jet(5);
-plot(tforwardCD_treat,out_big_CD(:,4,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardCD_treat,out_big_CD(:,4,1),'b','LineWidth',4)
 hold on
-plot(tforwardCD_treat,out_big_CD(:,4,2),'c-','LineWidth',4)
+plot(tforwardCD_treat,out_big_CD(:,4,2),'c-','LineWidth',2)
 hold on
 plot(tforwardCD_treat,out_big_CD(:,4,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardCD_treat,out_big_CD(:,4,4),'m--','LineWidth',4);
 hold on
-plot(tforwardCD_treat,out_big_CD(:,4,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardCD_treat,out_big_CD(:,4,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,4),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,4),'b','LineWidth',4);
 xlabel('t')
 ylim([0,400])
 ylabel('F(t)')
 title('CD');
 xlim([0,tf])
+xline(t0CD,'--k','HandleVisibility','off')
 grid on
 
 colors = jet(5);
 subplot(2,4,5)
-plot(tforwardHFD_treat,out_big_HFD(:,1,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardHFD_treat,out_big_HFD(:,1,1),'b','LineWidth',4)
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,1,2),'c-','LineWidth',4)
+plot(tforwardHFD_treat,out_big_HFD(:,1,2),'c-','LineWidth',2)
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,1,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,1,4),'m--','LineWidth',4);
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,1,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardHFD_treat,out_big_HFD(:,1,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,1),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,1),'b','LineWidth',4);
 xlabel('t')
 ylim([0,2100])
 ylabel('S(t)')
 title('HFD');
 xlim([0,tf])
+xline(t0HFD,'--k','HandleVisibility','off')
 grid on
 
 colors = jet(5);
 subplot(2,4,6)
-plot(tforwardHFD_treat,out_big_HFD(:,2,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardHFD_treat,out_big_HFD(:,2,1),'b','LineWidth',4)
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,2,2),'c-','LineWidth',4)
+plot(tforwardHFD_treat,out_big_HFD(:,2,2),'c-','LineWidth',2)
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,2,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,2,4),'m--','LineWidth',4);
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,2,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardHFD_treat,out_big_HFD(:,2,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,2),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,2),'b','LineWidth',4);
 xlabel('t')
 ylim([0,2100])
 ylabel('R(t)')
 title('HFD');
 xlim([0,tf])
+xline(t0HFD,'--k','HandleVisibility','off')
+legend(strcat('p_{HFD}= ',num2str(pHFD_test')),'Location','NorthWest','Orientation','vertical')
 grid on
 
 colors = jet(5);
 subplot(2,4,7)
-plot(tforwardHFD_treat,out_big_HFD(:,3,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardHFD_treat,out_big_HFD(:,3,1),'b','LineWidth',4)
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,3,2),'c-','LineWidth',4)
+plot(tforwardHFD_treat,out_big_HFD(:,3,2),'c-','LineWidth',2)
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,3,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,3,4),'m--','LineWidth',4);
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,3,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardHFD_treat,out_big_HFD(:,3,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,3),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,3),'b','LineWidth',4);
 xlabel('t')
 ylim([0,1500])
 ylabel('E(t)')
 title('HFD');
 xlim([0,tf])
+xline(t0HFD,'--k','HandleVisibility','off')
 grid on
-legend(strcat('p_{HFD}= ',num2str(pHFD_test')),'Location','NorthEast','Orientation','vertical')
 
 subplot(2,4,8)
-plot(tforwardHFD_treat,out_big_HFD(:,4,1),'color',colors(5,:),'LineWidth',2)
+plot(tforwardHFD_treat,out_big_HFD(:,4,1),'b','LineWidth',4)
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,4,2),'c-','LineWidth',4)
+plot(tforwardHFD_treat,out_big_HFD(:,4,2),'c-','LineWidth',2)
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,4,3),'-.','color',colors(3,:),'LineWidth',5);
 hold on
 plot(tforwardHFD_treat,out_big_HFD(:,4,4),'m--','LineWidth',4);
 hold on
-plot(tforwardHFD_treat,out_big_HFD(:,4,5),':','color',colors(1,:),'LineWidth',4);
+plot(tforwardHFD_treat,out_big_HFD(:,4,5),'r:','LineWidth',4);
 hold on
-plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,4),'color',colors(5,:),'LineWidth',2);
+plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,4),'b','LineWidth',4);
 xlabel('t')
 ylim([0,400])
 ylabel('F(t)')
 title('HFD');
 xlim([0,tf])
+xline(t0HFD,'--k','HandleVisibility','off')
 grid on
 
 end
