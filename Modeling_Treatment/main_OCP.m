@@ -1,10 +1,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Script to simulate optimal hormonal treatment
+% Script to simulate optimal anti-hormonal treatment
 %
 % Author: Tuğba Akman Date: Jan 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Data are taken from
+% Obesity-Activated Adipose-Derived Stromal Cells Promote
+% Breast Cancer Growth and Invasion
+% Neoplasia (2018) 20, 1161-1174
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function main()
+function main_OCP()
 
 close all
 clear
@@ -44,18 +50,18 @@ Eq.l=10;
 Eq.Sbound=0;
 Eq.k2CD = 0.045;
 Eq.k2HFD= 0.045;
-Eq.k3CD=0.25*Eq.k1;
-Eq.k3HFD=0.25*Eq.k1;
+Eq.k3CD=0.5*Eq.k1;
+Eq.k3HFD=0.5*Eq.k1;
 Eq.a2=20;
 Eq.a3=1;
 
 % Weights in the cost functional
 Eq.weight1 = 1; % omega_S for CD
 Eq.weight2 = 1; % omega_R for CD
-Eq.weight3 = 1; % omega_U for CD
+Eq.weight3 = 100; % omega_U for CD
 Eq.weight4 = 1; % omega_S for HFD
 Eq.weight5 = 1; % omega_R for HFD
-Eq.weight6 = 1; % omega_U for HFD
+Eq.weight6 = 100; % omega_U for HFD
 
 % Control constraints
 M1=0;    % Lower bound for control
@@ -65,7 +71,7 @@ M2=0.99; % Upper bound for control
 t0=0;                   % initial time
 tf = 25;                % final time
 Interval=100;           % Number of subintervals
-dt = ( tf-t0)/Interval; % Temporal increment
+dt = (tf-t0)/Interval; % Temporal increment
 Tu=t0:(1*dt):tf;        % ınterpolation points
 
 % tumor_threshold to start treatment
@@ -93,7 +99,7 @@ options = odeset('RelTol',1e-6,'AbsTol',1e-6);
 % Time to start treatment for CD
 Tumor=ceil(X_uncon_CD(:,1)+ X_uncon_CD(:,2));
 index_CD=(find(Tumor>tumor_threshold))-1;
-t0_treatment_CD=(Tx_uncon_CD(min(index_CD)));
+t0_treatment_CD=(Tx_uncon_CD(min(index_CD)))
 Tumor(min(index_CD));
 
 % Time discretization for treatment - CD
@@ -105,7 +111,7 @@ Tu_treatment=t0_treatment:(1*dt_treatment):tf;        % interpolation points
 % Time to start treatment for HFD
 Tumor=ceil(X_uncon_HFD(:,1)+ X_uncon_HFD(:,2));
 index_HFD=find(Tumor>tumor_threshold)-1;
-t0_treatment_HFD= (Tx_uncon_HFD(min(index_HFD)));
+t0_treatment_HFD= (Tx_uncon_HFD(min(index_HFD)))
 Tumor(min(index_HFD));
 
 %Preperation for treatment
@@ -218,9 +224,6 @@ while(test > 1e-5)
 
 end
 
-figure(25)
-plot(JCD_new,'b-','LineWidth',4)
-hold on
 
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -324,30 +327,25 @@ while(test > 1e-5)
 
 end
 
-figure(25)
-plot(JHFD_new,'c:.','LineWidth',4)
-title('The value of the cost functional')
-legend('CD','HFD','Location','NorthEast')
-xlabel('# of iterations')
-ylabel('J(u)')
-grid on
-
 %%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Plots
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 figure(1)
-plot(TxHFD,M2*ones(size(TxHFD)),'-r','LineWidth',4)
+plot(TxHFD,M2*ones(size(TxHFD)),'-m','LineWidth',4)
 hold on
-plot(TxCD,uCD,'b-','LineWidth',4)
+plot(TxCD,uCD,'k--','LineWidth',2)
 hold on
-plot(TxHFD,uHFD,'c:.','LineWidth',4)
+plot(TxHFD,uHFD,'k-.','LineWidth',2)
 title('Control function')
 xlabel('t')
 ylabel('u(t)')
-legend('Upper bound','CD','HFD','Location','SouthEast')
+legend('Maximum treatment','CD','HFD','Location','SouthWest')
 xlim([10,tf])
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
+hold on
+xline(t0_treatment_HFD,'-.k','HandleVisibility','off')
 grid on
 
 XCD=[X_uncon_treat_CD; XCD];
@@ -356,120 +354,129 @@ XHFD=[X_uncon_treat_HFD; XHFD];
 TxHFD=[Tx_uncon_treat_HFD;TxHFD];
 
 figure(330)
-plot(Tx_uncon_CD,X_uncon_CD(:,1)+X_uncon_CD(:,2),'r-','LineWidth',4)
+plot(Tx_uncon_CD,X_uncon_CD(:,1)+X_uncon_CD(:,2),'b-','LineWidth',4)
 hold on
-plot(TxCD,XCD(:,1)+XCD(:,2),'b:.','LineWidth',4)
+plot(TxCD,XCD(:,1)+XCD(:,2),'b:','LineWidth',4)
 grid on
-legend('u_{CD}=0','u_{CD} \neq 0','Location','SouthEast')
+legend('u_{CD}=0','u_{CD} \neq 0','Location','NorthWest')
 xlabel('t')
 ylabel('S(t)+R(t)')
 xlim([0,tf])
 ylim([0,2100])
 title('CD');
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
 figure(331)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,1)+X_uncon_HFD(:,2),'r-','LineWidth',4)
+plot(Tx_uncon_HFD,X_uncon_HFD(:,1)+X_uncon_HFD(:,2),'b-','LineWidth',4)
 hold on
-plot(TxHFD,XHFD(:,1)+XHFD(:,2),'b:.','LineWidth',4)
+plot(TxHFD,XHFD(:,1)+XHFD(:,2),'b:','LineWidth',4)
 grid on
-legend('u_{HFD}=0','u_{HFD} \neq 0','Location','SouthEast')
+legend('u_{HFD}=0','u_{HFD} \neq 0','Location','NorthWest')
 xlabel('t')
 ylabel('S(t)+R(t)')
 xlim([0,tf])
 ylim([0,2100])
 title('HFD');
+xline(t0_treatment_HFD,'--k','HandleVisibility','off')
 
 figure(21)
 subplot(2,4,1)
-plot(Tx_uncon_CD,X_uncon_CD(:,1),'r-','LineWidth',4)
+plot(Tx_uncon_CD,X_uncon_CD(:,1),'b-','LineWidth',4)
 hold on
-plot(TxCD,XCD(:,1),'b:.','LineWidth',4)
+plot(TxCD,XCD(:,1),'b:','LineWidth',4)
 grid on
 xlabel('t')
 ylabel('S(t)')
 title('CD')
 ylim([0,2100])
 xlim([0,tf])
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
 subplot(2,4,2)
-plot(Tx_uncon_CD,X_uncon_CD(:,2),'r-','LineWidth',4)
+plot(Tx_uncon_CD,X_uncon_CD(:,2),'b-','LineWidth',4)
 hold on
-plot(TxCD,XCD(:,2),'b:.','LineWidth',4)
+plot(TxCD,XCD(:,2),'b:','LineWidth',4)
 grid on
 xlabel('t')
 ylabel('R(t)')
 title('CD')
 ylim([0,2100])
 xlim([0,tf])
+legend('u_{CD}=0','u_{CD} \neq 0','Location','NorthWest')
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
 subplot(2,4,3)
-plot(Tx_uncon_CD,X_uncon_CD(:,3),'r-','LineWidth',4)
+plot(Tx_uncon_CD,X_uncon_CD(:,3),'b-','LineWidth',4)
 hold on
-plot(TxCD,XCD(:,3),'b:.','LineWidth',4)
+plot(TxCD,XCD(:,3),'b:','LineWidth',4)
 grid on
-legend('u_{CD}=0','u_{CD} \neq 0','Location','NorthEast')
 xlabel('t')
 ylabel('E(t)')
 title('CD')
 ylim([0,1500])
 xlim([0,tf])
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
 subplot(2,4,4)
-plot(Tx_uncon_CD,X_uncon_CD(:,4),'r-','LineWidth',4)
+plot(Tx_uncon_CD,X_uncon_CD(:,4),'b-','LineWidth',4)
 hold on
-plot(TxCD,XCD(:,4),'b:.','LineWidth',4)
+plot(TxCD,XCD(:,4),'b:','LineWidth',4)
 grid on
 xlabel('t')
 ylabel('F(t)')
 title('CD')
 ylim([0,400])
 xlim([0,tf])
+xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
 subplot(2,4,5)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,1),'r-','LineWidth',4)
+plot(Tx_uncon_HFD,X_uncon_HFD(:,1),'b-','LineWidth',4)
 hold on
-plot(TxHFD,XHFD(:,1),'b:.','LineWidth',4)
+plot(TxHFD,XHFD(:,1),'b:','LineWidth',4)
 grid on
 xlabel('t')
 ylabel('S(t)')
 title('HFD')
 ylim([0,2100])
 xlim([0,tf])
+xline(t0_treatment_HFD,'--k','HandleVisibility','off')
 
 subplot(2,4,6)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,2),'r-','LineWidth',4)
+plot(Tx_uncon_HFD,X_uncon_HFD(:,2),'b-','LineWidth',4)
 hold on
-plot(TxHFD,XHFD(:,2),'b:.','LineWidth',4)
+plot(TxHFD,XHFD(:,2),'b:','LineWidth',4)
 grid on
 xlabel('t')
 ylabel('R(t)')
 title('HFD')
 ylim([0,2100])
 xlim([0,tf])
+legend('u_{HFD}=0','u_{HFD} \neq 0','Location','NorthWest')
+xline(t0_treatment_HFD,'--k','HandleVisibility','off')
 
 subplot(2,4,7)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,3),'r-','LineWidth',4)
+plot(Tx_uncon_HFD,X_uncon_HFD(:,3),'b-','LineWidth',4)
 hold on
-plot(TxHFD,XHFD(:,3),'b:.','LineWidth',4)
+plot(TxHFD,XHFD(:,3),'b:','LineWidth',4)
 grid on
-legend('u_{HFD}=0','u_{HFD} \neq 0','Location','NorthEast')
 xlabel('t')
 ylabel('E(t)')
 title('HFD')
 ylim([0,1500])
 xlim([0,tf])
+xline(t0_treatment_HFD,'--k','HandleVisibility','off')
 
 subplot(2,4,8)
-plot(Tx_uncon_HFD,X_uncon_HFD(:,4),'r-','LineWidth',4)
+plot(Tx_uncon_HFD,X_uncon_HFD(:,4),'b-','LineWidth',4)
 hold on
-plot(TxHFD,XHFD(:,4),'b:.','LineWidth',4)
+plot(TxHFD,XHFD(:,4),'b:','LineWidth',4)
 grid on
 xlabel('t')
 ylabel('F(t)')
 title('HFD')
 ylim([0,400])
 xlim([0,tf])
-
+xline(t0_treatment_HFD,'--k','HandleVisibility','off')
 end
 
 %Sub-function
