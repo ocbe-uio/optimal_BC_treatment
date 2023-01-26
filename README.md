@@ -1,7 +1,7 @@
 # optimal_BC_treatment
 Modeling of mouse experiments suggests that optimal anti-hormonal treatment for breast cancer is diet-dependent
 
-Matlab codes and data to reproduce the results and figures in the preprint published in https://arxiv.org/submit/4703154. In each folder, the file main_X.m must be run.
+Matlab codes and data to reproduce the results and figures in the preprint published in http://arxiv.org/abs/2301.10553. In each folder, the file main_X.m must be run.
 
 Author list: Tuğba Akman, Lisa M. Arendt, Jürgen Geisler, Vessela N. Kristensen, Arnoldo Frigessi and Alvaro Köhn-Luque.
 
