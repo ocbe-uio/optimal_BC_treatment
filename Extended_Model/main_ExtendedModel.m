@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Script to simulate extended model
 %
-% Author: Tugba Akman Date: Jan 2023
+% Author: Tugba Akman Date: July 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Data are taken from
 % Obesity-Activated Adipose-Derived Stromal Cells Promote
@@ -48,15 +48,16 @@ Fat_HFD_ydata = NumbOfASC_HFD_ydata*(4/3)*pi*(radius_HFD^3);
 T0=1;
 S0=1;
 R0=T0-S0;
-E0_CD=1040.35/5.94;
-E0_HFD=7685.87/5.94;
-F0_CD = 49.923;
-F0_HFD = 368.82;
+E0_CD=170;
+E0_HFD=1200;
+
+F0_CD= 50;
+F0_HFD = 360;
 
 % Time discretization
 dt = 0.01;
-t0CD=13.75;
-t0HFD=11.5;
+t0CD=14;%time to start treatment for CD
+t0HFD=12;%time to start treatment for HFD
 tf=25;
 tforwardCD = 0:dt:t0CD; % t mesh for CD
 tforwardHFD = 0:dt:t0HFD; % t mesh for HFD
@@ -69,10 +70,10 @@ m1 = 5e-4;
 m2CD = 1/(F0_HFD); 
 m2HFD = 1/(F0_HFD);
 n = 1;
-k1 = 0.586967;
-a1 = 59.0927;
-r = 20.8391;
-alpha = 2.21427e-05;
+k1=0.55;
+a1=43;
+r=20;
+alpha=1.7e-6;
 cc=1;
 l=10;
 dCD=0;
@@ -81,12 +82,12 @@ K=1/m1;
 m=1;
 betaCD=1;
 betaHFD=1;
-k2CD = 0.045;
-k2HFD= 0.045;
+k2CD = 1*0.05;
+k2HFD= 1*0.05;
 a2=10;
 a3=10;
-k3CD=0.25*k1;
-k3HFD=0.25*k1;
+k3CD=0.5*k1;
+k3HFD=0.5*k1;
 
 pCD_test=0.5*[2,1/20,1/40,1/50,1/500];
 pHFD_test=0.5*[2,1/20,1/40,1/50,1/500];
@@ -230,7 +231,7 @@ plot(tforwardCD_treat,out_big_CD(:,3,5),'r:','LineWidth',4);
 hold on
 plot(Tx_uncon_treat_CD,X_uncon_treat_CD(:,3),'b','LineWidth',4);
 xlabel('t')
-ylim([0,1500])
+ylim([0,1250])
 ylabel('E(t)')
 title('CD');
 xlim([0,tf])
@@ -315,7 +316,7 @@ plot(tforwardHFD_treat,out_big_HFD(:,3,5),'r:','LineWidth',4);
 hold on
 plot(Tx_uncon_treat_HFD,X_uncon_treat_HFD(:,3),'b','LineWidth',4);
 xlabel('t')
-ylim([0,1500])
+ylim([0,1250])
 ylabel('E(t)')
 title('HFD');
 xlim([0,tf])
