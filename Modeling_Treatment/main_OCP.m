@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Script to simulate optimal anti-hormonal treatment
 %
-% Author: Tuğba Akman Date: Jan 2023
+% Author: Tuğba Akman Date: July 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Data are taken from
@@ -25,10 +25,11 @@ global Eq
 T0=1;
 S0=1;
 R0=T0-S0;
-E0_CD=1040.35/5.94;
-E0_HFD=7685.87/5.94;
-F0_CD = 49.923;
-F0_HFD = 368.82;
+E0_CD=170;
+E0_HFD=1200;
+
+F0_CD= 50;
+F0_HFD = 360;
 
 % Parameters
 Eq.mu = 5.94;
@@ -36,10 +37,10 @@ Eq.m1 = 5e-4;
 Eq.m2CD = 1/(F0_HFD);
 Eq.m2HFD = 1/(F0_HFD);
 Eq.n = 1;
-Eq.k1 = 0.586967;
-Eq.a1 = 59.0927;
-Eq.r = 20.8391;
-Eq.alpha = 2.21427e-05;
+Eq.k1=0.55;
+Eq.a1=43;
+Eq.r=20;
+Eq.alpha=1.7e-6;
 Eq.pCD=1;
 Eq.pHFD=1;
 Eq.K=1/Eq.m1;
@@ -48,8 +49,8 @@ Eq.betaCD=1;
 Eq.betaHFD=1;
 Eq.l=10;
 Eq.Sbound=0;
-Eq.k2CD = 0.045;
-Eq.k2HFD= 0.045;
+Eq.k2CD = 0.05;
+Eq.k2HFD= 0.05;
 Eq.k3CD=0.5*Eq.k1;
 Eq.k3HFD=0.5*Eq.k1;
 Eq.a2=20;
@@ -58,10 +59,10 @@ Eq.a3=1;
 % Weights in the cost functional
 Eq.weight1 = 1; % omega_S for CD
 Eq.weight2 = 1; % omega_R for CD
-Eq.weight3 = 100; % omega_U for CD
-Eq.weight4 = 1; % omega_S for HFD
+Eq.weight3 = 1; % omega_U for CD
+Eq.weight4 = 1; % omega_S for HFD 
 Eq.weight5 = 1; % omega_R for HFD
-Eq.weight6 = 100; % omega_U for HFD
+Eq.weight6 = 1; % omega_U for HFD
 
 % Control constraints
 M1=0;    % Lower bound for control
@@ -96,8 +97,11 @@ options = odeset('RelTol',1e-6,'AbsTol',1e-6);
 [Tx_uncon_HFD,X_uncon_HFD] = ode15s(@(t,x) stateEqHFD(t,x,uHFD,Tu), Tu, ...
     initx(5:end), options);
 
+figure;
+plot(Tx_uncon_CD,X_uncon_CD(:,1))
+%pause
 % Time to start treatment for CD
-Tumor=ceil(X_uncon_CD(:,1)+ X_uncon_CD(:,2));
+Tumor=ceil(X_uncon_CD(:,1)+ X_uncon_CD(:,2))
 index_CD=(find(Tumor>tumor_threshold))-1;
 t0_treatment_CD=(Tx_uncon_CD(min(index_CD)))
 Tumor(min(index_CD));
@@ -113,7 +117,7 @@ Tumor=ceil(X_uncon_HFD(:,1)+ X_uncon_HFD(:,2));
 index_HFD=find(Tumor>tumor_threshold)-1;
 t0_treatment_HFD= (Tx_uncon_HFD(min(index_HFD)))
 Tumor(min(index_HFD));
-
+pause
 %Preperation for treatment
 [Tx_uncon_treat_CD,X_uncon_treat_CD] = ode15s(@(t,x) stateEqCD(t,x,uCD,Tu), [t0:.0001:t0_treatment_CD], ...
     initx(1:4), options);
@@ -212,7 +216,7 @@ while(test > 1e-5)
     temp9 = norm((oldlambda4 - lambda4))/norm((lambda4));
 
     test = max(temp1, max(temp2, max( temp3, max( temp4, max(temp5,...
-        max(temp6, max(temp7, max(temp8, temp9))))))));
+        max(temp6, max(temp7, max(temp8, temp9))))))))
 
     %test=temp1;
 
@@ -317,7 +321,7 @@ while(test > 1e-5)
     temp9 = norm((oldlambda4 - lambda4))/norm((lambda4));
 
     test = max(temp1, max(temp2, max( temp3, max( temp4, max(temp5,...
-        max(temp6, max(temp7, max(temp8, temp9))))))));
+        max(temp6, max(temp7, max(temp8, temp9))))))))
     
     XHFD=X; TxHFD=Tx;
 
@@ -425,7 +429,7 @@ grid on
 xlabel('t')
 ylabel('F(t)')
 title('CD')
-ylim([0,400])
+ylim([0,1100])
 xlim([0,tf])
 xline(t0_treatment_CD,'--k','HandleVisibility','off')
 
@@ -474,7 +478,7 @@ grid on
 xlabel('t')
 ylabel('F(t)')
 title('HFD')
-ylim([0,400])
+ylim([0,1100])
 xlim([0,tf])
 xline(t0_treatment_HFD,'--k','HandleVisibility','off')
 end
