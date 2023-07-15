@@ -1,0 +1,15 @@
+DESCRIPTION
+"FatHFD data"
+
+PREDICTOR 
+t T day time 0 15
+
+INPUTS
+
+OBSERVABLES
+Fat_HFD C c/p conc. 0 0 "FHFD"
+
+ERRORS
+Fat_HFD "sd_F"
+
+CONDITIONS

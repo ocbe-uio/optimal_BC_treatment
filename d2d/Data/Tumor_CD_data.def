@@ -1,0 +1,15 @@
+DESCRIPTION
+"TumorCD data"
+
+PREDICTOR 
+t T day time 0 15
+
+INPUTS
+
+OBSERVABLES
+Tumor_CD C c/p conc. 0 0 "TCD"
+
+ERRORS
+Tumor_CD "sd_T"
+
+CONDITIONS

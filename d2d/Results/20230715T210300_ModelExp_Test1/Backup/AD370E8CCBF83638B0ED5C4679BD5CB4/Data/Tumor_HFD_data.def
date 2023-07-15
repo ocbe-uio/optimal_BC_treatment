@@ -1,0 +1,15 @@
+DESCRIPTION
+"TumorHFD data"
+
+PREDICTOR 
+t T day time 0 15
+
+INPUTS
+
+OBSERVABLES
+Tumor_HFD C c/p conc. 0 0 "THFD"
+
+ERRORS
+Tumor_HFD "sd_T"
+
+CONDITIONS

@@ -1,0 +1,46 @@
+DESCRIPTION
+"Model of Mice Experiment"
+"Date: 2023"
+
+PREDICTOR
+t T day time 0 15
+
+COMPARTMENTS
+tissue C cp conc. 1
+
+STATES
+TCD C cp conc. tissue 1 TCD 1 
+ECD C cp conc. tissue 1 ECD 1 
+FCD C cp conc. tissue 1 FCD 1  
+THFD C cp conc. tissue 1 THFD 1  
+EHFD C cp conc. tissue 1 EHFD 1  
+FHFD C cp conc. tissue 1 FHFD 1 
+
+INPUTS
+
+ODES
+"k1*TCD*(1- (TCD*m1))*((ECD)/(a1+(ECD)))"
+"r*FCD - mu*ECD "
+"- alpha*TCD*FCD"
+"k1*THFD*(1- (THFD*m1))*((EHFD)/(a1+(EHFD)))"
+"r*FHFD - mu*EHFD"
+"- alpha*THFD*FHFD"
+
+DERIVED
+
+OBSERVABLES
+        
+ERRORS
+
+SUBSTITUTIONS (optional)
+
+CONDITIONS
+m1 "5e-4"
+mu "5.94"
+r "20"
+init_TCD "1"
+init_ECD "170" // init_CD / init_FCD = 3.51
+init_FCD "50"
+init_THFD "1"
+init_EHFD "1200 // init_HFD / init_FHFD = 3.49
+init_FHFD "360"

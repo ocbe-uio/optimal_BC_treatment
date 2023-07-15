@@ -1,0 +1,15 @@
+DESCRIPTION
+"FatCD data"
+
+PREDICTOR 
+t T day time 0 15
+
+INPUTS
+
+OBSERVABLES
+Fat_CD C c/p conc. 0 0 "FCD"
+
+ERRORS
+Fat_CD "sd_F"
+
+CONDITIONS
