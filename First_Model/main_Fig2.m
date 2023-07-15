@@ -1,12 +1,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Script to simulate Fig.2
 %
-% Author: Tugba Akman Date: Jan 2023
+% Author: Tugba Akman Date: July 2023
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Data are taken from
 % Obesity-Activated Adipose-Derived Stromal Cells Promote
 % Breast Cancer Growth and Invasion
-% Neoplasia (2018) 20, 1161–1174
+% Neoplasia (2018) 20, 1161â€“1174
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function main_Fig2
 
@@ -49,11 +49,16 @@ NumbOfASC_CD_ydata = ((tumor_CD_ydata(3))^(2/3))*(143.18/diam_CD);
 NumbOfASC_HFD_ydata = ((tumor_HFD_ydata(3))^(2/3))*(159.09/diam_HFD);
 
 % Amount of fat
-Fat_CD_ydata = NumbOfASC_CD_ydata*(4/3)*pi*(radius_CD^3);
-Fat_HFD_ydata = NumbOfASC_HFD_ydata*(4/3)*pi*(radius_HFD^3);
+Fat_CD_ydata = NumbOfASC_CD_ydata*(4/3)*pi*(radius_CD^3); 
+Fat_HFD_ydata = NumbOfASC_HFD_ydata*(4/3)*pi*(radius_HFD^3); 
 
 %Initial conditions
 T0=1;
+E0_CD=170;
+E0_HFD=1200;
+
+F0_CD= 50;
+F0_HFD = 360;
 
 %statistical tools
 [Fat_data_matrix_CD,Fat_data_matrix_HFD]=Computation_FatData;
@@ -65,26 +70,28 @@ tmeasure_Fat = 1501; % the points in the solution of F corresponding to the t va
 tmeasure_tumor = [1001,1301,1501]'; % the points in the solution of T corresponding to the t values of tdata
 
 % Parameters in the model
-mu = 5.94;%
+mu = 5.94;
 m1 = 1/2000;
 n = 1;
-k1 = 0.586967;
-a1 = 59.0927;
-E0_CD = 175.143;
-E0_HFD = 1293.98;
-r = 20.8391;
-alpha = 2.21427e-05;
-F0_CD = 49.923;
-F0_HFD = 368.820;
+k1=0.55;
+a1=43;
+r=20;
+alpha=1.7e-6;
+
 params = [];
 
 %%
 % solve the system on a larger interval and plot the solution
-tforward = 0:0.01:20; % t mesh for the solution of the DE
+tforward = 0:0.01:30; % t mesh for the solution of the DE
 initial_cond = [T0 E0_CD F0_CD T0 E0_HFD F0_HFD];
 [~, y_r] = ode15s(@(t,y)Model_combined(y,params),tforward,initial_cond);
 
 %%
+Fat_CD_tdata_plot = [0,Fat_CD_tdata];
+Fat_CD_ydata_plot = [F0_CD, Fat_CD_ydata];
+Fat_HFD_tdata_plot = [0,Fat_HFD_tdata];
+Fat_HFD_ydata_plot = [F0_HFD, Fat_HFD_ydata];
+
 colormap lines
 
 figure(33)
@@ -99,14 +106,14 @@ f4=plot(tforward,y_r(:,3),'LineWidth',2);
 hold on;
 errorbar(Fat_CD_tdata,Fat_CD_ydata,stdev1_fat_CD,'kx--','LineWidth',2);
 hold on
-f5=plot(Fat_CD_tdata,Fat_CD_ydata,'kx','LineWidth',2);
+f5=plot(Fat_CD_tdata_plot,Fat_CD_ydata_plot,'kx','LineWidth',2);
 ylabel('T(t), F(t)')
 axis([0 20 0 2000])
 yyaxis right
 f6=plot(tforward,y_r(:,2),':','LineWidth',2);
 ylabel('E(t)')
 xlabel('t (days)')
-axis([0 20 150 1300])
+axis([0 20 100 1250])
 title('Simulation results for CD')
 grid on
 legend([f1,  f3,  f4,f5,f6],{'T','Data_T','F','Data_F','E'},'Location','Best')
@@ -124,14 +131,14 @@ f4=plot(tforward,y_r(:,6),'LineWidth',2);
 hold on;
 errorbar(Fat_HFD_tdata,Fat_HFD_ydata,stdev2_fat_HFD,'kx--','LineWidth',2);
 hold on
-f5=plot(Fat_HFD_tdata,Fat_HFD_ydata,'kx','LineWidth',2);
+f5=plot(Fat_HFD_tdata_plot,Fat_HFD_ydata_plot,'kx','LineWidth',2);
 ylabel('T(t), F(t)')
 axis([0 20 0 2000])
 yyaxis right
 f6=plot(tforward,y_r(:,5),':','LineWidth',2);
 ylabel('E(t)')
 xlabel('t (days)')
-axis([0 20 150 1300])
+axis([0 20 100 1250])
 title('Simulation results for HFD')
 grid on
 legend([f1,  f3,  f4,f5,f6],{'T','Data_T','F','Data_F','E'},'Location','Best')
