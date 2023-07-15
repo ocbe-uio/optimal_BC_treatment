@@ -25,10 +25,11 @@ global Eq
 T0=1;
 S0=0.75;
 R0=T0-S0;
-E0_CD=1040.35/5.94;
-E0_HFD=7685.87/5.94;
-F0_CD = 49.923;
-F0_HFD = 368.82;
+E0_CD=170;
+E0_HFD=1200;
+
+F0_CD= 50;
+F0_HFD = 360;
 
 % Parameters
 Eq.mu = 5.94;
@@ -36,10 +37,10 @@ Eq.m1 = 5e-4;
 Eq.m2CD = 1/(F0_HFD);
 Eq.m2HFD = 1/(F0_HFD);
 Eq.n = 1;
-Eq.k1 = 0.586967;
-Eq.a1 = 59.0927;
-Eq.r = 20.8391;
-Eq.alpha = 2.21427e-05;
+Eq.k1=0.55;
+Eq.a1=43;
+Eq.r=20;
+Eq.alpha=1.7e-6;
 Eq.pCD=1;
 Eq.pHFD=1;
 Eq.K=1/Eq.m1;
@@ -48,12 +49,12 @@ Eq.betaCD=1;
 Eq.betaHFD=1;
 Eq.l=10;
 Eq.Sbound=0;
-Eq.k2CD = 0.045;
-Eq.k2HFD= 0.045;
+Eq.k2CD = 0.05;
+Eq.k2HFD= 0.05;
 Eq.k3CD=0.5*Eq.k1;
 Eq.k3HFD=0.5*Eq.k1;
-Eq.a2=20;
-Eq.a3=1;
+Eq.a2=10;
+Eq.a3=10;
 
 % Weights in the cost functional
 Eq.weight1 = 1;
@@ -119,7 +120,7 @@ initx_treatment_HFD = X_uncon_treat_HFD(end,:);
 
 % Set the treatment for CD
 uCD_adapt=0*ones(size(Tu_treatment))';
-for ii=1:2:6 % 10
+for ii=1:2:6%6 % 10
     uCD_adapt((ii-1)*21+1:((ii*21)))=M2*1; % 21 11
 end
 
@@ -135,7 +136,7 @@ Tu_treatment=t0_treatment:0.1:tf;
 
 % Set the treatment for HFD
 uHFD_adapt=0*ones(size(Tu_treatment))';
-for ii=1:2:6 %6 11
+for ii=1:2:6%6 %6 11
     uHFD_adapt((ii-1)*21+1:((ii*21)))=M2*1; % 21 11
 end
 
